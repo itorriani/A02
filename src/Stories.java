@@ -4,10 +4,11 @@ Author: Ivan T.
 
 //imports
 import java.util.LinkedList;
-import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
 
 
-public class Stories {
+public class Stories extends JFrame {
 
 
     //initialize variables
@@ -16,12 +17,27 @@ public class Stories {
     
     private String description; 
 
-    private LinkedList<Project> attatchments = new LinkedList<>();  
+    private LinkedList<String> attatchments = new LinkedList<>();  
 
     private boolean position; 
 
 
-    public Stories(String subjectLine, String description, LinkedList<Project> attatchments, boolean position)
+    private JTextField subjectLineField;
+    
+    private JTextArea descriptionArea;
+
+    private JTextField attatchmentField;
+
+    private DefaultListModel<String> attatchmentListModel;
+
+    private JList<String> attatchmentList;
+
+    private JCheckBox positionCheckBox;
+
+    private JTextArea outputArea;
+
+
+    public Stories(String subjectLine, String description, LinkedList<String> attatchments, boolean position)
     {
         this.subjectLine = subjectLine;
         this.description = description; 
@@ -29,56 +45,187 @@ public class Stories {
         this.position = position;
     }
 
+
+    public Stories()
+    {
+        setTitle("Stories GUI");
+
+        setSize(500, 600);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        setLocationRelativeTo(null);
+
+
+        JPanel mainPanel = new JPanel();
+
+        mainPanel.setLayout(new BorderLayout(10, 10));
+
+
+        JPanel inputPanel = new JPanel();
+
+        inputPanel.setLayout(new GridLayout(0, 1, 5, 5));
+
+
+        JLabel subjectLabel = new JLabel("Enter Subject Line: ");
+
+        subjectLineField = new JTextField();
+
+
+        JLabel descriptionLabel = new JLabel("Enter Description: ");
+
+        descriptionArea = new JTextArea(5, 20);
+
+        JScrollPane descriptionScrollPane = new JScrollPane(descriptionArea);
+
+
+        JLabel attatchmentLabel = new JLabel("Please enter string attatchment:");
+
+        attatchmentField = new JTextField();
+
+        JButton addAttatchmentButton = new JButton("Add Attatchment");
+
+
+        attatchmentListModel = new DefaultListModel<>();
+
+        attatchmentList = new JList<>(attatchmentListModel);
+
+        JScrollPane attatchmentScrollPane = new JScrollPane(attatchmentList);
+
+
+        JButton removeAttatchmentButton = new JButton("Remove Selected Attatchment");
+
+
+        positionCheckBox = new JCheckBox("Enter Position");
+
+
+        JButton createButton = new JButton("Create Story");
+
+
+        outputArea = new JTextArea(8, 20);
+
+        outputArea.setEditable(false);
+
+        JScrollPane outputScrollPane = new JScrollPane(outputArea);
+
+
+        addAttatchmentButton.addActionListener(e -> {
+            String toAdd = attatchmentField.getText();
+
+            if (!toAdd.equals("")) {
+                attatchmentListModel.addElement(toAdd);
+                attatchmentField.setText("");
+            }
+        });
+
+
+        removeAttatchmentButton.addActionListener(e -> {
+            int selectedIndex = attatchmentList.getSelectedIndex();
+
+            if (selectedIndex != -1) {
+                attatchmentListModel.remove(selectedIndex);
+            }
+        });
+
+
+        createButton.addActionListener(e -> {
+            String newSubjectLine = subjectLineField.getText();
+
+            String newDescription = descriptionArea.getText();
+
+            boolean newPosition = positionCheckBox.isSelected();
+
+            LinkedList<String> newAttatchments = new LinkedList<>();
+
+
+            for (int i = 0; i < attatchmentListModel.size(); i++) {
+                newAttatchments.add(attatchmentListModel.getElementAt(i));
+            }
+
+
+            setSubjectLine(newSubjectLine);
+
+            setDescription(newDescription);
+
+            setAttatchments(newAttatchments);
+
+            setPosition(newPosition);
+
+
+            outputArea.setText(
+                "Subject Line: " + getSubjectLine() +
+                "\nDescription: " + getDescription() +
+                "\nAttatchments: " + getAttatchments() +
+                "\nPosition: " + getPosition()
+            );
+        });
+
+
+        inputPanel.add(subjectLabel);
+
+        inputPanel.add(subjectLineField);
+
+        inputPanel.add(descriptionLabel);
+
+        inputPanel.add(descriptionScrollPane);
+
+        inputPanel.add(attatchmentLabel);
+
+        inputPanel.add(attatchmentField);
+
+        inputPanel.add(addAttatchmentButton);
+
+        inputPanel.add(attatchmentScrollPane);
+
+        inputPanel.add(removeAttatchmentButton);
+
+        inputPanel.add(positionCheckBox);
+
+        inputPanel.add(createButton);
+
+        inputPanel.add(new JLabel("Output:"));
+
+        inputPanel.add(outputScrollPane);
+
+
+        mainPanel.add(inputPanel, BorderLayout.CENTER);
+
+
+        add(mainPanel);
+    }
+
     
-    public void setSubjectLine()
+    public void setSubjectLine(String newSubjectLine)
     {
         /*
         Description: Get user input to set subect line. Refer to tasks 
         class for line by line comments
         */
 
-       Scanner input = new Scanner(System.in);
-
-       System.out.println("Enter Subject Line: ");
-
-       String newSubjectLine = input.nextLine();
-
        this.subjectLine = newSubjectLine;
 
     }
 
-    public void setDescription()
+    public void setDescription(String newDescription)
     {
         /*
         Description: Get user input to set the description. Refer to tasks 
         class for line by line comments
         */
 
-       Scanner input = new Scanner(System.in);
-
-       System.out.println("Enter Description: ");
-
-       String newDescription = input.nextLine();
-
        this.description = newDescription;
 
     }
 
-    public void setPosition()
+    public void setPosition(boolean newPosition)
     {
-
-        Scanner input = new Scanner(System.in);
-
-        System.out.println("Enter Position:");
-
-        boolean newPosition = input.nextBoolean();
 
         this.position = newPosition;
 
 
     }
 
-    public void setAttatchments()
+    public void setAttatchments(LinkedList<String> newAttatchments)
     {
 
         /*
@@ -86,26 +233,6 @@ public class Stories {
         attatchments are just user inputted strings 
         (will add logic for other types later)
         */
-
-        String close = "close"; // create close string to close when needed
-
-        
-
-        LinkedList<Project> newAttatchments = new LinkedList<>(); // create an 
-        //temporary array for new attatchments
-
-        while (true) { 
-                Scanner input = new Scanner(System.in); //input setp
-
-                System.out.println("Please enter string attatchment. Enter close if you
-                want to stop"); //prompt
-
-                String toAdd = input.nextLine(); //read the input
-
-                if (toAdd.equals("close")) { return; } //return if the user types in close
-
-                newAttatchments.add(toAdd); // add element
-        }
 
         this.attatchments = newAttatchments; //assign the copied list
 
@@ -123,7 +250,7 @@ public class Stories {
         return description;
     }
 
-    public LinkedList<Project> getAttatchments() {
+    public LinkedList<String> getAttatchments() {
         return attatchments;
     }
 
@@ -134,4 +261,11 @@ public class Stories {
     
 
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Stories gui = new Stories();
+
+            gui.setVisible(true);
+        });
+    }
 }
