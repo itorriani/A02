@@ -8,10 +8,11 @@ Random Ideas:
 */
 
 //imports
-import java.Util.Scanner;
+import javax.swing.*;
+import java.awt.*;
 
 
-public class Task {
+public class Task extends JFrame {
 
 
     //initialize variables
@@ -21,6 +22,16 @@ public class Task {
     private String userAssignment; 
 
     private int taskValue; 
+
+
+    private JTextField taskNameField;
+    
+    private JTextField userAssignmentField;
+
+    private JTextField taskValueField;
+
+    private JTextArea outputArea;
+
 
     public Task(String taskName, String userAssignment, int taskValue)
     {
@@ -32,56 +43,140 @@ public class Task {
         this.taskValue = taskValue;
     }
 
+
+    public Task()
+    {
+        setTitle("Task GUI");
+
+        setSize(500, 400);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        setLocationRelativeTo(null);
+
+
+        JPanel mainPanel = new JPanel();
+
+        mainPanel.setLayout(new BorderLayout(10, 10));
+
+
+        JPanel inputPanel = new JPanel();
+
+        inputPanel.setLayout(new GridLayout(0, 1, 5, 5));
+
+
+        JLabel taskNameLabel = new JLabel("Enter Task Name: ");
+
+        taskNameField = new JTextField();
+
+
+        JLabel userAssignmentLabel = new JLabel("Enter User Assignment: ");
+
+        userAssignmentField = new JTextField();
+
+
+        JLabel taskValueLabel = new JLabel("Enter Task Value: ");
+
+        taskValueField = new JTextField();
+
+
+        JButton createButton = new JButton("Create Task");
+
+
+        outputArea = new JTextArea(8, 20);
+
+        outputArea.setEditable(false);
+
+        JScrollPane outputScrollPane = new JScrollPane(outputArea);
+
+
+        createButton.addActionListener(e -> {
+            String newTaskName = taskNameField.getText();
+
+            String newUserAssignment = userAssignmentField.getText();
+
+            int newTaskValue = 0;
+
+
+            try {
+                newTaskValue = Integer.parseInt(taskValueField.getText());
+
+                setTaskName(newTaskName);
+
+                setUserAssignment(newUserAssignment);
+
+                setTaskValue(newTaskValue);
+
+
+                outputArea.setText(
+                    "Task Name: " + getTaskName() +
+                    "\nUser Assignment: " + getUserAssignment() +
+                    "\nTask Value: " + getTaskValue()
+                );
+            }
+            catch (NumberFormatException error) {
+                outputArea.setText("Task Value must be a number.");
+            }
+        });
+
+
+        inputPanel.add(taskNameLabel);
+
+        inputPanel.add(taskNameField);
+
+        inputPanel.add(userAssignmentLabel);
+
+        inputPanel.add(userAssignmentField);
+
+        inputPanel.add(taskValueLabel);
+
+        inputPanel.add(taskValueField);
+
+        inputPanel.add(createButton);
+
+        inputPanel.add(new JLabel("Output:"));
+
+        inputPanel.add(outputScrollPane);
+
+
+        mainPanel.add(inputPanel, BorderLayout.CENTER);
+
+
+        add(mainPanel);
+    }
+
     
-    public void setTaskName()
+    public void setTaskName(String newTaskName)
     {
         /*
         Method Description: assign a task object's taskName
         */
-       Scanner input = new Scanner(System.in); // set up scanner object to get console info
-
-       System.out.println("Enter Task Name: ") // prompt user to enter task name 
-
-       String newTaskName = input.nextLine();  //read task name from console
 
        this.taskName = newTaskName; //assign taskName
 
     }
 
-    public void setUserAssignment()
+    public void setUserAssignment(String newUserAssignment)
     {
         /*
         Method Description: assign a task user
         */
 
-       Scanner input = new Scanner(System.in); // set up scanner object to get console info
-
-       System.out.println("Enter User Assignment: ") // prompt user to enter user assignment 
-
-       String newUserAssignment = input.nextLine();  //read user name from console
-
        this.userAssignment = newUserAssignment; //assign taskName
 
     }
 
-    public void setTaskValue()
+    public void setTaskValue(int newTaskValue)
     {
         /*
         Method Description: assign a task object's taskName
         */
 
-        Scanner input = new Scanner(System.in); // set up scanner object to get console info
-
-        System.out.println("Enter Task Value"); // prompt user to enter user value
-
-        int newTaskValue = input.nextInt(); // read from console
-
-        this.taskValue = newTaskValue(); // assign task
+        this.taskValue = newTaskValue; // assign task
 
 
     }
 
-    public 
 
     // Getters . setters
     public String getTaskName() {
@@ -95,19 +190,14 @@ public class Task {
     public int getTaskValue() {
         return taskValue;
     }
-
-    public String setTaskName(String newTaskName) {
-        this.taskName = newTaskName;
-    }
-
-    public String getUserAssignment(String newUserAssignment) {
-        this.userAssignment = newUserAssignment;
-    }
-
-    public int getTaskValue(int newTaskValue) {
-        this.taskValue = newTaskValue;
-    }
     
 
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Task gui = new Task();
+
+            gui.setVisible(true);
+        });
+    }
 }
