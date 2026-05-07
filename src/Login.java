@@ -19,7 +19,7 @@ public class Login {
 
 
 
-    public Stories(); // empty constructor
+    public Login() {} // empty constructor
 
     
     public void setUser()
@@ -65,7 +65,8 @@ public class Login {
         */
 
 
-        if (!(user.equals(validUser) || !(pass.equals(validPass)) return false )); 
+        if (!user.equals(validUser) || !pass.equals(validPass)) return false;
+        return true;
 
     }
 

@@ -1,11 +1,18 @@
+package src;
+
+import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
+import java.util.ArrayList;
+
 public class Taskboard {
 
-    //create hashmpa of different sections
+    //create hashmap of different sections
     private Map<String, List<Task>> taskBoardSections = new HashMap<>();
 
     public Taskboard() {
 
-        //Initiailize the taskboard with these sections
+        //Initialize the taskboard with these sections
         taskBoardSections.put("New", new ArrayList<>());
 
         taskBoardSections.put("In Progress", new ArrayList<>());
@@ -22,7 +29,7 @@ public class Taskboard {
         /*
         Description: Create a new task and add it to the new task section to start with
         */
-        Task newTask = Task(taskName, userAssignment, taskValue); //create a new task
+        Task newTask = new Task(taskName, userAssignment, taskValue); //create a new task
 
         taskBoardSections.get("New").add(newTask); //add new task to task section
     }
@@ -30,14 +37,13 @@ public class Taskboard {
     public void reorganizeTask(String oldSection, String newSection)
     {
         /*
-        Description: Primitive functionality to move an task from the old 
+        Description: Primitive functionality to move a task from the old 
         section to the new section. Primitive because I'm only moving the first element
         from that old section to a new section. 
         */
 
-        Task taskToMove = taskBoardSections.get(oldSection).first(); // get the first element 
+        Task taskToMove = taskBoardSections.get(oldSection).get(0); // get the first element
 
         taskBoardSections.get(newSection).add(taskToMove); // add task
-        
     }
 }

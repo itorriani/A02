@@ -1,6 +1,12 @@
-/*
-Author: Ivan T. 
-*/
+/**
+ * A panel that creates a new story.
+ * 
+ *
+ * @author Ivan Torriani
+ * @version 1.0
+ */
+
+package src;
 
 //imports
 import java.util.LinkedList;

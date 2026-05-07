@@ -10,7 +10,7 @@ public class Project {
     private String projType;
     private String authType;
     private List<Stories> userStories;
-    private List<Tasks> userTasks;
+    private List<Task> userTasks;
     private List<Sprints> userSprints;
 
     public Project(int id, String name, String description, String projType, String authType) {
@@ -20,7 +20,7 @@ public class Project {
         this.projType = projType;
         this.authType = authType;
         this.userStories = new ArrayList<Stories>();
-        this.userTasks = new ArrayList<Tasks>();
+        this.userTasks = new ArrayList<Task>();
         this.userSprints = new ArrayList<Sprints>();
     }
 
@@ -28,7 +28,7 @@ public class Project {
         this.userStories.add(s);
     }
 
-    public void addUserTask(Tasks t) {
+    public void addUserTask(Task t) {
         this.userTasks.add(t);
     }
 
@@ -40,7 +40,7 @@ public class Project {
         return this.userStories;
     }
 
-    public List<Tasks> getTask() {
+    public List<Task> getTask() {
         return this.userTasks;
     }
 
@@ -48,4 +48,11 @@ public class Project {
         return this.userSprints;
     }
 
+    // Getters
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public String getProjectName() { return name; }
+    public String getDescription() { return description; }
+    public String getProjType() { return projType; }
+    public String getAuthType() { return authType; }
 }

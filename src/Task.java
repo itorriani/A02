@@ -7,6 +7,8 @@ Random Ideas:
 - Need method to assign value to task
 */
 
+package src;
+
 //imports
 import javax.swing.*;
 import java.awt.*;
