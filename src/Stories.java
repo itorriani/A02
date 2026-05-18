@@ -6,8 +6,6 @@
  * @version 1.0
  */
 
-package src;
-
 //imports
 import java.util.LinkedList;
 import javax.swing.*;

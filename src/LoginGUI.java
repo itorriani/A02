@@ -62,7 +62,7 @@ public class LoginGUI extends JFrame {
                 boolean valid = login.checkValidity();
                 if (valid) {
                     JOptionPane.showMessageDialog(LoginGUI.this, "Login successful!");
-                    new Taskboard();
+                    new Blackboard();
                     LoginGUI.this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(LoginGUI.this, "Invalid credentials!");

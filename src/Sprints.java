@@ -1,5 +1,3 @@
-package src;
-
 import java.util.List;
 import java.util.ArrayList;
 
@@ -41,4 +39,9 @@ public class Sprints {
     public List<Task> getTask() {
         return this.userTasks;
     }
+
+    // Getters
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public String getDescription() { return description; }
 }

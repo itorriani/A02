@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /**
  * Represents a user in the system with associated projects.
  * Users have a name, email, and list of projects.
@@ -7,10 +6,6 @@
  * @version 1.0
  */
 
-package src;
-=======
-//package src;
->>>>>>> e8c2a71c84ac7b637ebfdf97414c4a2531e4efdd
 import java.util.*;
 
 public class User {

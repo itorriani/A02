@@ -1,5 +1,3 @@
-package src;
-
 /**
  * Observer interface for receiving notifications when a project is added
  * to the ProjectRepository (Blackboard).

@@ -6,8 +6,6 @@
  * @version 1.0
  */
 
-package src;
-
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
