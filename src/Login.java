@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Login class for user authentication.
  * Validates username and password credentials.
@@ -7,6 +8,9 @@
  */
 
 package src;
+=======
+//package src;
+>>>>>>> e8c2a71c84ac7b637ebfdf97414c4a2531e4efdd
 
 //imports
 import java.util.LinkedList;
@@ -25,52 +29,41 @@ public class Login {
 
 
 
+<<<<<<< HEAD
     public Login() {} // empty constructor
+=======
+    public Login() { // empty constructor
+
+    }
+    public void setUser(String newUser)
+    {
+        this.user = newUser;
+    }
+
+    public void setPass(String newPass)
+    {
+        this.pass = newPass;
+    }
+
+    public boolean checkValidity()
+    {
+        /*
+        Description: Check if the user is a valid email or password is "password"
+        Email: at least 3 letters before @, some text after @, followed by .net, .com, .org, or .edu
+        Password: accept "password" universally for testing, or any password if email is valid
+        */
+
+        String emailRegex = "^[a-zA-Z]{3,}@.+\\.(net|com|org|edu)$";
+        return (user != null && user.matches(emailRegex)) || "password".equals(pass);
+    
+        }
+    }
+>>>>>>> e8c2a71c84ac7b637ebfdf97414c4a2531e4efdd
 
     
-    public void setUser()
-    {
-        /*
-        Description: Get user input to set subect line. Refer to tasks 
-        class for line by line comments
-        */
-
-       Scanner input = new Scanner(System.in);
-
-       System.out.println("Enter the Username: ");
-
-       String newUser = input.nextLine();
-
-       this.user = newUser;
-
-    }
-
-    public void setPass()
-    {
-        /*
-        Description: Get user input to set the description. Refer to tasks 
-        class for line by line comments
-        */
-
-       Scanner input = new Scanner(System.in);
-
-       System.out.println("Enter Password: ");
-
-       String newPass = input.nextLine();
-
-       this.pass = newPass;
-
-    }
-
-    public boolean checkValidity(String validUser, String validPass)
-    {
-
-        /*
-        Description: Check if the user and password is correct
-        based on some future knowledgeo f what the user/password is
-        */
 
 
+<<<<<<< HEAD
         if (!user.equals(validUser) || !pass.equals(validPass)) return false;
         return true;
 
@@ -78,3 +71,5 @@ public class Login {
 
 
 }
+=======
+>>>>>>> e8c2a71c84ac7b637ebfdf97414c4a2531e4efdd

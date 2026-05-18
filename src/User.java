@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Represents a user in the system with associated projects.
  * Users have a name, email, and list of projects.
@@ -7,6 +8,9 @@
  */
 
 package src;
+=======
+//package src;
+>>>>>>> e8c2a71c84ac7b637ebfdf97414c4a2531e4efdd
 import java.util.*;
 
 public class User {
@@ -31,7 +35,6 @@ public class User {
 
     // Method to add a project to the user's list of projects
     public void addProjectToUser(Project project) {
-        System.out.println("Adding project: " + project.getProjectName() + " to user: " + this.name);
         projects.add(project);
     }
 
@@ -42,7 +45,6 @@ public class User {
 
     // Method to remove a project from the user's list of projects
     public void removeUserProject(Project project) {
-        System.out.println("Removing project: " + project.getProjectName() + " from user: " + this.name);
         projects.remove(project);
     }
 
@@ -50,7 +52,7 @@ public class User {
     public void displayUserProjects() {
         System.out.println("Projects for user: " + this.name);
         for (Project project : projects) {
-            System.out.println("- " + project.getProjectName());
+            System.out.println("- " + project);
         }
     }
 
