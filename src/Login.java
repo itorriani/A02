@@ -1,6 +1,12 @@
-/*
+/**
+ * Login class for user authentication.
+ * Validates username and password credentials.
+ *
+ * @author Ivan Torriani
+ * @version 1.0
+ */
 
-*/
+package src;
 
 //imports
 import java.util.LinkedList;

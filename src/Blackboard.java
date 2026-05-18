@@ -1,3 +1,11 @@
+/**
+ * Blackboard for organizing tasks into different workflow sections.
+ * Sections include: New, In Progress, Ready for Test, Closed, Needs Info.
+ *
+ * @author Ivan Torriani
+ * @version 1.0
+ */
+
 package src;
 
 import java.util.Map;
@@ -5,12 +13,12 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-public class Taskboard {
+public class Blackboard {
 
     //create hashmap of different sections
     private Map<String, List<Task>> taskBoardSections = new HashMap<>();
 
-    public Taskboard() {
+    public Blackboard() {
 
         //Initialize the taskboard with these sections
         taskBoardSections.put("New", new ArrayList<>());

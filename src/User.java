@@ -1,3 +1,11 @@
+/**
+ * Represents a user in the system with associated projects.
+ * Users have a name, email, and list of projects.
+ *
+ * @author Ivan Torriani
+ * @version 1.0
+ */
+
 package src;
 import java.util.*;
 

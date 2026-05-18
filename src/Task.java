@@ -1,11 +1,10 @@
-/*
-Author: Ivan T. 
-
-Random Ideas:
-- Need method to name task
-- Need method to assign user to task
-- Need method to assign value to task
-*/
+/**
+ * GUI for creating and managing Tasks.
+ * A task has a name, user assignment, and value.
+ *
+ * @author Ivan Torriani
+ * @version 1.0
+ */
 
 package src;
 

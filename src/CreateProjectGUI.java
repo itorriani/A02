@@ -83,7 +83,7 @@ public class CreateProjectGUI extends JFrame {
 
         Project project = new Project(nextId++, name, description, projType, authType);
 
-        // TODO (Task 2): ProjectRepository.getInstance().addProject(project);
+        ProjectRepository.getInstance().addProject(project);
 
         outputArea.setText(
             "Project Created Successfully!\n" +

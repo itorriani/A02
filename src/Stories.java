@@ -1,6 +1,6 @@
 /**
- * A panel that creates a new story.
- * 
+ * GUI for creating and managing Stories (user stories).
+ * A story has a subject line, description, attachments, and position.
  *
  * @author Ivan Torriani
  * @version 1.0

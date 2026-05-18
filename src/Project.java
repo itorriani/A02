@@ -1,3 +1,11 @@
+/**
+ * Represents a project with stories, tasks, and sprints.
+ * Projects have an ID, name, description, type, and auth type.
+ *
+ * @author Ivan Torriani
+ * @version 1.0
+ */
+
 package src;
 
 import java.util.ArrayList;
