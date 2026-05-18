@@ -2,7 +2,7 @@
  * Login class for user authentication.
  * Validates username and password credentials.
  *
- * @author Nico Yenikomshian
+ * @author Anthony Soto
  * @version 1.0
  */
 

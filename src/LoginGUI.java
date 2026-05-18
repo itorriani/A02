@@ -1,13 +1,15 @@
-//package src;
+/**
+ * GUI for login with username and password fields.
+ *
+ * @author Anthony Soto
+ * @version 1.0
+ */
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * GUI for login with username and password fields.
- */
 public class LoginGUI extends JFrame {
 
     private JTextField userField;

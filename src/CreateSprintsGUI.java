@@ -1,10 +1,12 @@
+/**
+ * GUI for creating a new sprint. Gets names, descriptions, stories, and tasks.
+ *
+ * @author Ivan Torriani
+ * @version 1.0
+ */
 
 import javax.swing.*;
 import java.awt.*;
-
-/**
- * GUI for creating a new sprint. Gets names, descriptions, stories, and tasks.
- */
 
 public class CreateSprintsGUI extends JFrame {
 
