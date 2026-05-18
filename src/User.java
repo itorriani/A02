@@ -3,7 +3,7 @@
  * Represents a user in the system with associated projects.
  * Users have a name, email, and list of projects.
  *
- * @author Ivan Torriani
+ * @author Nico Yenikomshian
  * @version 1.0
  */
 
