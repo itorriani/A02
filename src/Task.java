@@ -2,7 +2,7 @@
  * GUI for creating and managing Tasks.
  * A task has a name, user assignment, and value.
  *
- * @author Ivan Torriani
+ * @author Anthony Soto
  * @version 1.0
  */
 
