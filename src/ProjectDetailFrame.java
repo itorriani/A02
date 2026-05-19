@@ -182,12 +182,18 @@ public class ProjectDetailFrame extends JFrame {
         add.addActionListener(e -> {
             Stories story = new Stories(f1.getText(), f2.getText(),
                     Integer.parseInt(f3.getText()), f4.getText());
-            // parse comma-separated tasks and add to story
+          
+           //get tasks by comma seperated values
             LinkedList<String> taskList = new LinkedList<>();
+            
+            //iterate through the string
             for (String t : f5.getText().split(",")) {
+                //debug trim
                 String trimmed = t.trim();
+                //add totaskList
                 if (!trimmed.isEmpty()) taskList.add(trimmed);
             }
+            //add 
             story.setTasks(taskList);
             project.addUserStory(story);
             ProjectRepository.getInstance().addStory(story);
