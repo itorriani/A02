@@ -82,4 +82,14 @@ java -cp src MainApp
 
 ## Ideas
 
-- A backlog is created on the same main dashboard panel. This holds a collection of stories, who each have their individual assignments
+- A backlog is created on the same main dashboard panel. This holds a collection of stories, who each have a) their assigned person b) their description c) their value. 
+DONE
+
+- Functionality to assign tasks to sprints. So in the add sprints, there should be an option to select which stories
+DONE
+
+- Need to address the sprint viewing options (DONE)
+
+- Need to address the multiple projects. 
+
+- This should be it I just need to address ProjectDetailFrame

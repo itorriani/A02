@@ -5,57 +5,73 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * Detail window for a single project.
- * Shows the project's sprints (top half) and backlog stories (bottom half).
- * Sprints and stories are scoped to this project only.
+ * Window display for a new project.
+ * that pops up when double clicked
  *
  * @author Ivan Torriani
  * @version 1.0
  */
 public class ProjectDetailFrame extends JFrame {
 
-    private final Project project;
-    private final DefaultTableModel sprintTableModel;
-    private final DefaultTableModel storyTableModel;
+    //create project instance
+    private  Project project;
+    /
+    //create tables for sprints and stories
+    private  DefaultTableModel sprintTableModel;
+    private  DefaultTableModel storyTableModel;
 
     public ProjectDetailFrame(Project project) {
+        //refer to project instance
         this.project = project;
 
+        //title the popup based on project title
         setTitle("Project: " + project.getName());
-        setSize(650, 600);
+
+        //closing operation
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         JPanel root = new JPanel(new BorderLayout(10, 10));
         root.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // ── Sprint panel (top) ──────────────────────────────────────────────
+        //__________________________________________-
+        /*
+        Sprint panel 
+        */
+        //Create sprint panel on the top of the popup
         JPanel sprintPanel = new JPanel(new BorderLayout(5, 5));
         sprintPanel.setBorder(BorderFactory.createTitledBorder("Sprints"));
 
+        //define the spirnnt columns
         String[] sprintCols = {"ID", "Name", "Description", "Stories"};
-        sprintTableModel = new DefaultTableModel(sprintCols, 0) {
-            @Override public boolean isCellEditable(int r, int c) { return false; }
-        };
+
+        ///create the table
         JTable sprintTable = new JTable(sprintTableModel);
+
+        //formatting
         sprintTable.setFillsViewportHeight(true);
         sprintTable.getColumnModel().getColumn(0).setMaxWidth(40);
         sprintTable.getColumnModel().getColumn(3).setMaxWidth(60);
 
         // Double-click a sprint to see its stories
         sprintTable.addMouseListener(new MouseAdapter() {
-            @Override
+            @Override //debug overide
             public void mouseClicked(MouseEvent e) {
+                //for when there are two clicks
                 if (e.getClickCount() == 2) {
+                    //get the row
                     int row = sprintTable.getSelectedRow();
-                    if (row == -1) return;
+                    //get sprint id
                     int sprintId = (int) sprintTableModel.getValueAt(row, 0);
+
+                    //debugging
                     Sprints sprint = ProjectRepository.getInstance().getSprintById(sprintId);
                     if (sprint != null) openSprintDetail(sprint);
                 }
             }
         });
 
+        //add sprint
         sprintPanel.add(new JScrollPane(sprintTable), BorderLayout.CENTER);
 
         JButton addSprintBtn = new JButton("+ New Sprint");
@@ -64,8 +80,12 @@ public class ProjectDetailFrame extends JFrame {
             form.setVisible(true);
         });
         sprintPanel.add(addSprintBtn, BorderLayout.SOUTH);
+        
 
-        // ── Story / backlog panel (bottom) ──────────────────────────────────
+        //__________________________________________-
+        /*
+        Backlog panel for stories
+        */
         JPanel storyPanel = new JPanel(new BorderLayout(5, 5));
         storyPanel.setBorder(BorderFactory.createTitledBorder("Backlog Stories"));
 
@@ -89,6 +109,7 @@ public class ProjectDetailFrame extends JFrame {
             addStoryRow(s);
         }
 
+        //formatting
         JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sprintPanel, storyPanel);
         split.setResizeWeight(0.5);
         split.setDividerLocation(250);
@@ -97,17 +118,26 @@ public class ProjectDetailFrame extends JFrame {
         add(root);
     }
 
-    /** Opens the new-sprint form scoped to this project. */
+    
     private void openSprintDetail(Sprints sprint) {
+        /*
+        Functionality to open sprint related information
+        */
+
+        //title sprint detail based on name
         JFrame detail = new JFrame("Sprint: " + sprint.getName());
+
+        //formatting
         detail.setSize(450, 350);
         detail.setLocationRelativeTo(this);
         detail.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        //create new panel 
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.add(new JLabel("Stories in \"" + sprint.getName() + "\":"), BorderLayout.NORTH);
 
+        //format based on story characteristics
         String[] cols = {"Name", "Description", "Value", "Assigned To"};
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
