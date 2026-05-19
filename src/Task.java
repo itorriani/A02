@@ -22,7 +22,6 @@ public class Task extends JFrame {
 
     private int taskValue; 
 
-
     private JTextField taskNameField;
     
     private JTextField userAssignmentField;
@@ -32,13 +31,8 @@ public class Task extends JFrame {
     private JTextArea outputArea;
 
 
-    /**
-     * Constructs a Task with the specified name, user assignment, and value.
-     *
-     * @param taskName       the name of the task
-     * @param userAssignment the user assigned to this task
-     * @param taskValue      the point value of the task
-     */
+
+
     public Task(String taskName, String userAssignment, int taskValue) {
         this.taskName = taskName;
         this.userAssignment = userAssignment; 
@@ -150,67 +144,39 @@ public class Task extends JFrame {
     }
 
     
-    /**
-     * Sets the name of this task.
-     *
-     * @param newTaskName the new task name
-     */
+
     public void setTaskName(String newTaskName) {
         this.taskName = newTaskName;
     }
 
-    /**
-     * Sets the user assigned to this task.
-     *
-     * @param newUserAssignment the username to assign
-     */
+
     public void setUserAssignment(String newUserAssignment) {
         this.userAssignment = newUserAssignment;
     }
 
-    /**
-     * Sets the point value of this task.
-     *
-     * @param newTaskValue the new task value
-     */
+
     public void setTaskValue(int newTaskValue) {
         this.taskValue = newTaskValue;
     }
 
-    /**
-     * Returns the name of this task.
-     *
-     * @return the task name
-     */
+
     public String getTaskName() {
         return taskName;
     }
 
-    /**
-     * Returns the user assigned to this task.
-     *
-     * @return the assigned username
-     */
+
     public String getUserAssignment() {
         return userAssignment;
     }
 
-    /**
-     * Returns the point value of this task.
-     *
-     * @return the task value
-     */
+
     public int getTaskValue() {
         return taskValue;
     }
     
 
 
-    /**
-     * Entry point for running the Task GUI standalone.
-     *
-     * @param args command line arguments (not used)
-     */
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Task gui = new Task();

@@ -3,7 +3,8 @@ import java.awt.*;
 
 /**
  * Main application window for the project management tool.
- * Hosts a "New Project" button and the live project list panel.
+ * Hosts a "New Project" button, the live project list panel (top),
+ * and the product backlog panel (bottom).
  * The list updates automatically via the Observer pattern when a project is created.
  *
  * @author Matthew Wiecking
@@ -12,11 +13,11 @@ import java.awt.*;
 public class MainApp extends JFrame {
 
     /**
-     * Builds the main window with a toolbar and the live project list.
+     * Builds the main window with a toolbar, project list, and backlog panel.
      */
     public MainApp() {
         setTitle("Project Management");
-        setSize(700, 450);
+        setSize(700, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -31,12 +32,25 @@ public class MainApp extends JFrame {
         });
         toolbar.add(newProjectBtn);
 
+        JSplitPane splitPane = new JSplitPane(
+            JSplitPane.VERTICAL_SPLIT,
+            new ProjectListPanel(),
+            new BacklogPanel()
+        );
+        splitPane.setResizeWeight(0.5);
+        splitPane.setDividerLocation(250);
+
         root.add(toolbar, BorderLayout.NORTH);
-        root.add(new ProjectListPanel(), BorderLayout.CENTER);
+        root.add(splitPane, BorderLayout.CENTER);
 
         add(root);
     }
 
+    /**
+     * Entry point for running the main application.
+     *
+     * @param args command line arguments (not used)
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             MainApp app = new MainApp();

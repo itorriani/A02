@@ -1,275 +1,160 @@
 /**
- * GUI for creating and managing Stories (user stories).
- * A story has a subject line, description, attachments, and position.
+ * Represents a user story with a subject line, description, attachments, position, value, and assigned user.
  *
  * @author Ivan Torriani
  * @version 1.0
  */
 
-//imports
 import java.util.LinkedList;
-import javax.swing.*;
-import java.awt.*;
 
+public class Stories {
 
-public class Stories extends JFrame {
+    private String subjectLine;
+    private String description;
+    private LinkedList<String> attatchments = new LinkedList<>();
+    private boolean position;
+    private int value;
+    private String assignedUser;
 
-
-    //initialize variables
-
-    private String subjectLine; 
-    
-    private String description; 
-
-    private LinkedList<String> attatchments = new LinkedList<>();  
-
-    private boolean position; 
-
-
-    private JTextField subjectLineField;
-    
-    private JTextArea descriptionArea;
-
-    private JTextField attatchmentField;
-
-    private DefaultListModel<String> attatchmentListModel;
-
-    private JList<String> attatchmentList;
-
-    private JCheckBox positionCheckBox;
-
-    private JTextArea outputArea;
-
-
-    public Stories(String subjectLine, String description, LinkedList<String> attatchments, boolean position)
-    {
+    /**
+     * Constructs a Story with all fields.
+     *
+     * @param subjectLine  the subject line
+     * @param description  the description
+     * @param attatchments list of attachments
+     * @param position     the position flag
+     */
+    public Stories(String subjectLine, String description, LinkedList<String> attatchments, boolean position) {
         this.subjectLine = subjectLine;
-        this.description = description; 
+        this.description = description;
         this.attatchments = attatchments;
         this.position = position;
+        this.value = 0;
+        this.assignedUser = "";
     }
 
-
-    public Stories()
-    {
-        setTitle("Stories GUI");
-
-        setSize(500, 600);
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        setLocationRelativeTo(null);
-
-
-        JPanel mainPanel = new JPanel();
-
-        mainPanel.setLayout(new BorderLayout(10, 10));
-
-
-        JPanel inputPanel = new JPanel();
-
-        inputPanel.setLayout(new GridLayout(0, 1, 5, 5));
-
-
-        JLabel subjectLabel = new JLabel("Enter Subject Line: ");
-
-        subjectLineField = new JTextField();
-
-
-        JLabel descriptionLabel = new JLabel("Enter Description: ");
-
-        descriptionArea = new JTextArea(5, 20);
-
-        JScrollPane descriptionScrollPane = new JScrollPane(descriptionArea);
-
-
-        JLabel attatchmentLabel = new JLabel("Please enter string attatchment:");
-
-        attatchmentField = new JTextField();
-
-        JButton addAttatchmentButton = new JButton("Add Attatchment");
-
-
-        attatchmentListModel = new DefaultListModel<>();
-
-        attatchmentList = new JList<>(attatchmentListModel);
-
-        JScrollPane attatchmentScrollPane = new JScrollPane(attatchmentList);
-
-
-        JButton removeAttatchmentButton = new JButton("Remove Selected Attatchment");
-
-
-        positionCheckBox = new JCheckBox("Enter Position");
-
-
-        JButton createButton = new JButton("Create Story");
-
-
-        outputArea = new JTextArea(8, 20);
-
-        outputArea.setEditable(false);
-
-        JScrollPane outputScrollPane = new JScrollPane(outputArea);
-
-
-        addAttatchmentButton.addActionListener(e -> {
-            String toAdd = attatchmentField.getText();
-
-            if (!toAdd.equals("")) {
-                attatchmentListModel.addElement(toAdd);
-                attatchmentField.setText("");
-            }
-        });
-
-
-        removeAttatchmentButton.addActionListener(e -> {
-            int selectedIndex = attatchmentList.getSelectedIndex();
-
-            if (selectedIndex != -1) {
-                attatchmentListModel.remove(selectedIndex);
-            }
-        });
-
-
-        createButton.addActionListener(e -> {
-            String newSubjectLine = subjectLineField.getText();
-
-            String newDescription = descriptionArea.getText();
-
-            boolean newPosition = positionCheckBox.isSelected();
-
-            LinkedList<String> newAttatchments = new LinkedList<>();
-
-
-            for (int i = 0; i < attatchmentListModel.size(); i++) {
-                newAttatchments.add(attatchmentListModel.getElementAt(i));
-            }
-
-
-            setSubjectLine(newSubjectLine);
-
-            setDescription(newDescription);
-
-            setAttatchments(newAttatchments);
-
-            setPosition(newPosition);
-
-
-            outputArea.setText(
-                "Subject Line: " + getSubjectLine() +
-                "\nDescription: " + getDescription() +
-                "\nAttatchments: " + getAttatchments() +
-                "\nPosition: " + getPosition()
-            );
-        });
-
-
-        inputPanel.add(subjectLabel);
-
-        inputPanel.add(subjectLineField);
-
-        inputPanel.add(descriptionLabel);
-
-        inputPanel.add(descriptionScrollPane);
-
-        inputPanel.add(attatchmentLabel);
-
-        inputPanel.add(attatchmentField);
-
-        inputPanel.add(addAttatchmentButton);
-
-        inputPanel.add(attatchmentScrollPane);
-
-        inputPanel.add(removeAttatchmentButton);
-
-        inputPanel.add(positionCheckBox);
-
-        inputPanel.add(createButton);
-
-        inputPanel.add(new JLabel("Output:"));
-
-        inputPanel.add(outputScrollPane);
-
-
-        mainPanel.add(inputPanel, BorderLayout.CENTER);
-
-
-        add(mainPanel);
+    /**
+     * Constructs a Story with value and assigned user.
+     *
+     * @param subjectLine  the subject line
+     * @param description  the description
+     * @param value        the story point value
+     * @param assignedUser the user assigned to this story
+     */
+    public Stories(String subjectLine, String description, int value, String assignedUser) {
+        this.subjectLine = subjectLine;
+        this.description = description;
+        this.value = value;
+        this.assignedUser = assignedUser;
+        this.attatchments = new LinkedList<>();
+        this.position = false;
     }
 
-    
-    public void setSubjectLine(String newSubjectLine)
-    {
-        /*
-        Description: Get user input to set subect line. Refer to tasks 
-        class for line by line comments
-        */
-
-       this.subjectLine = newSubjectLine;
-
+    /**
+     * Sets the subject line of this story.
+     *
+     * @param newSubjectLine the new subject line
+     */
+    public void setSubjectLine(String newSubjectLine) {
+        this.subjectLine = newSubjectLine;
     }
 
-    public void setDescription(String newDescription)
-    {
-        /*
-        Description: Get user input to set the description. Refer to tasks 
-        class for line by line comments
-        */
-
-       this.description = newDescription;
-
+    /**
+     * Sets the description of this story.
+     *
+     * @param newDescription the new description
+     */
+    public void setDescription(String newDescription) {
+        this.description = newDescription;
     }
 
-    public void setPosition(boolean newPosition)
-    {
-
+    /**
+     * Sets the position flag of this story.
+     *
+     * @param newPosition the new position value
+     */
+    public void setPosition(boolean newPosition) {
         this.position = newPosition;
-
-
     }
 
-    public void setAttatchments(LinkedList<String> newAttatchments)
-    {
-
-        /*
-        Description: Get user input to add attatchments. For now, 
-        attatchments are just user inputted strings 
-        (will add logic for other types later)
-        */
-
-        this.attatchments = newAttatchments; //assign the copied list
-
-
+    /**
+     * Sets the attachments list for this story.
+     *
+     * @param newAttatchments the new list of attachments
+     */
+    public void setAttatchments(LinkedList<String> newAttatchments) {
+        this.attatchments = newAttatchments;
     }
 
+    /**
+     * Sets the story point value.
+     *
+     * @param value the new value
+     */
+    public void setValue(int value) {
+        this.value = value;
+    }
 
+    /**
+     * Sets the user assigned to this story.
+     *
+     * @param assignedUser the username to assign
+     */
+    public void setAssignedUser(String assignedUser) {
+        this.assignedUser = assignedUser;
+    }
 
-    // Getters
+    /**
+     * Returns the subject line of this story.
+     *
+     * @return the subject line
+     */
     public String getSubjectLine() {
         return subjectLine;
     }
 
+    /**
+     * Returns the description of this story.
+     *
+     * @return the description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Returns the list of attachments.
+     *
+     * @return the attachments list
+     */
     public LinkedList<String> getAttatchments() {
         return attatchments;
     }
 
+    /**
+     * Returns the position flag.
+     *
+     * @return the position value
+     */
     public boolean getPosition() {
         return position;
     }
 
-    
+    /**
+     * Returns the story point value.
+     *
+     * @return the value
+     */
+    public int getValue() {
+        return value;
+    }
 
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Stories gui = new Stories();
-
-            gui.setVisible(true);
-        });
+    /**
+     * Returns the user assigned to this story.
+     *
+     * @return the assigned user
+     */
+    public String getAssignedUser() {
+        return assignedUser;
     }
 }
