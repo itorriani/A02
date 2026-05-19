@@ -1,11 +1,13 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
- * A panel that displays all projects stored in the ProjectRepository (Blackboard).
- * Implements ProjectObserver so it automatically updates whenever a new project
- * is added — no manual refresh needed.
+ * A panel that displays all sprints stored in the ProjectRepository.
+ * Implements ProjectObserver so it automatically updates whenever a new sprint
+ * is added. Double-clicking a row opens a detail frame showing its stories.
  *
  * @author Matthew Wiecking
  * @version 1.0
@@ -13,6 +15,7 @@ import java.awt.*;
 public class ProjectListPanel extends JPanel implements ProjectObserver {
 
     private final DefaultTableModel tableModel;
+    private final JTable table;
 
     /**
      * Constructs the panel, builds the table, and registers as an observer
@@ -28,28 +31,80 @@ public class ProjectListPanel extends JPanel implements ProjectObserver {
             public boolean isCellEditable(int row, int col) { return false; }
         };
 
-        JTable table = new JTable(tableModel);
+        table = new JTable(tableModel);
         table.setFillsViewportHeight(true);
         table.getColumnModel().getColumn(0).setMaxWidth(40);
         table.getColumnModel().getColumn(3).setMaxWidth(80);
         table.getColumnModel().getColumn(4).setMaxWidth(80);
 
+        // Double-click a row to open the sprint detail frame
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //tracking double click
+                if (e.getClickCount() == 2) {
+
+                    //get row
+                    int row = table.getSelectedRow();
+                    
+                    //get the sprint id
+                    int sprintId = (int) tableModel.getValueAt(row, 0);
+
+                    //get the sprint instance
+                    Sprints sprint = ProjectRepository.getInstance().getSprintById(sprintId);
+                    if (sprint != null) {
+                        openSprintDetail(sprint);
+                    }
+                }
+            }
+        });
+
         add(new JScrollPane(table), BorderLayout.CENTER);
 
         ProjectRepository.getInstance().addObserver(this);
 
-        // Populate any projects already in the repository at construction time
         for (Project p : ProjectRepository.getInstance().getProjects()) {
             addRow(p);
         }
     }
 
     /**
-     * Called by ProjectRepository whenever a new project is added.
-     * Appends a row to the table on the Swing event thread.
-     *
-     * @param project the newly added project
+     * Opens a detail frame showing all stories assigned to the given sprint.
      */
+    private void openSprintDetail(Sprints sprint) {
+        JFrame detail = new JFrame("Sprint: " + sprint.getName());
+        detail.setSize(450, 350);
+        detail.setLocationRelativeTo(this);
+        detail.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        panel.add(new JLabel("Stories in \"" + sprint.getName() + "\":"), BorderLayout.NORTH);
+
+        String[] columns = {"Name", "Description", "Value", "Assigned To"};
+        DefaultTableModel storyModel = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int col) { return false; }
+        };
+
+        for (Stories s : sprint.getStory()) {
+            storyModel.addRow(new Object[]{
+                s.getSubjectLine(),
+                s.getDescription(),
+                s.getValue(),
+                s.getAssignedUser()
+            });
+        }
+
+        JTable storyTable = new JTable(storyModel);
+        storyTable.setFillsViewportHeight(true);
+        panel.add(new JScrollPane(storyTable), BorderLayout.CENTER);
+
+        detail.add(panel);
+        detail.setVisible(true);
+    }
+
     @Override
     public void onProjectAdded(Project project) {
         SwingUtilities.invokeLater(() -> addRow(project));

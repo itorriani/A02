@@ -107,6 +107,7 @@ public class CreateSprintsGUI extends JFrame {
 
         // Push to repository so the observer fires and the sprint list updates
         Project project = new Project(id, name, description, sprintType, authType);
+        ProjectRepository.getInstance().addSprint(sprint);
         ProjectRepository.getInstance().addProject(project);
 
         outputArea.setText(

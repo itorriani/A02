@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Blackboard-style shared data repository for projects.
@@ -16,6 +18,7 @@ public class ProjectRepository {
 
     private final List<Project> projects = new ArrayList<>();
     private final List<Stories> stories = new ArrayList<>();
+    private final Map<Integer, Sprints> sprints = new HashMap<>();
     private final List<ProjectObserver> observers = new ArrayList<>();
 
     private ProjectRepository() {}
@@ -52,6 +55,14 @@ public class ProjectRepository {
 
     public List<Stories> getStories() {
         return Collections.unmodifiableList(stories);
+    }
+
+    public void addSprint(Sprints sprint) {
+        sprints.put(sprint.getId(), sprint);
+    }
+
+    public Sprints getSprintById(int id) {
+        return sprints.get(id);
     }
 
     /**
