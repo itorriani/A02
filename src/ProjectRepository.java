@@ -49,6 +49,13 @@ public class ProjectRepository {
         return Collections.unmodifiableList(projects);
     }
 
+    public Project getProjectById(int id) {
+        for (Project p : projects) {
+            if (p.getId() == id) return p;
+        }
+        return null;
+    }
+
     public void addStory(Stories story) {
         stories.add(story);
     }

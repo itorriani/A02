@@ -1,22 +1,22 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * GUI form for creating a new sprint.
- * Collects sprint name, description, type, and auth type from the user.
- * Lets the user pick stories from the current backlog to assign to the sprint.
+ * GUI form for creating a new sprint scoped to a specific project.
+ * Lets the user pick stories from the project's backlog to assign to the sprint.
  *
  * @author Ivan Torriani
  * @version 1.0
  */
 public class CreateSprintsGUI extends JFrame {
 
+    private final Project project;
+    private final DefaultTableModel sprintTableModel;
+
     private JTextField nameField;
     private JTextArea descriptionArea;
-    private JComboBox<String> sprintTypeCombo;
-    private JComboBox<String> authTypeCombo;
     private JList<String> storiesList;
     private DefaultListModel<String> storiesListModel;
     private JTextArea outputArea;
@@ -24,11 +24,15 @@ public class CreateSprintsGUI extends JFrame {
     private static int nextId = 1;
 
     /**
-     * Constructs and lays out the Create Sprint form.
+     * @param project         the project this sprint belongs to
+     * @param sprintTableModel the table in ProjectDetailFrame to update on creation
      */
-    public CreateSprintsGUI() {
-        setTitle("Create New Sprint");
-        setSize(500, 620);
+    public CreateSprintsGUI(Project project, DefaultTableModel sprintTableModel) {
+        this.project = project;
+        this.sprintTableModel = sprintTableModel;
+
+        setTitle("New Sprint for: " + project.getName());
+        setSize(500, 560);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -45,18 +49,10 @@ public class CreateSprintsGUI extends JFrame {
         descriptionArea = new JTextArea(4, 20);
         inputPanel.add(new JScrollPane(descriptionArea));
 
-        inputPanel.add(new JLabel("Sprint Type:"));
-        sprintTypeCombo = new JComboBox<>(new String[]{"Scrum", "Kanban", "Waterfall"});
-        inputPanel.add(sprintTypeCombo);
-
-        inputPanel.add(new JLabel("Auth Type:"));
-        authTypeCombo = new JComboBox<>(new String[]{"Public", "Private", "Protected"});
-        inputPanel.add(authTypeCombo);
-
-        // Stories checklist — populated from the shared StoryRepository
+        // Stories come from this project's backlog
         inputPanel.add(new JLabel("Assign Stories (hold Cmd/Ctrl to multi-select):"));
         storiesListModel = new DefaultListModel<>();
-        for (Stories s : ProjectRepository.getInstance().getStories()) {
+        for (Stories s : project.getStory()) {
             storiesListModel.addElement(s.getSubjectLine());
         }
         storiesList = new JList<>(storiesListModel);
@@ -68,7 +64,7 @@ public class CreateSprintsGUI extends JFrame {
         inputPanel.add(createButton);
 
         inputPanel.add(new JLabel("Output:"));
-        outputArea = new JTextArea(5, 20);
+        outputArea = new JTextArea(4, 20);
         outputArea.setEditable(false);
         inputPanel.add(new JScrollPane(outputArea));
 
@@ -78,15 +74,9 @@ public class CreateSprintsGUI extends JFrame {
         add(mainPanel);
     }
 
-    /**
-     * Validates input, creates a Sprints object with selected stories,
-     * adds it to the repository, and displays a confirmation.
-     */
     private void handleCreateSprint() {
         String name = nameField.getText().trim();
         String description = descriptionArea.getText().trim();
-        String sprintType = (String) sprintTypeCombo.getSelectedItem();
-        String authType = (String) authTypeCombo.getSelectedItem();
 
         if (name.isEmpty()) {
             outputArea.setText("Error: Sprint name cannot be empty.");
@@ -96,39 +86,31 @@ public class CreateSprintsGUI extends JFrame {
         int id = nextId++;
         Sprints sprint = new Sprints(id, name, description);
 
-        // Add selected stories to the sprint
-        List<Stories> allStories = ProjectRepository.getInstance().getStories();
+        // Attach selected stories from this project's backlog
         List<String> selectedNames = storiesList.getSelectedValuesList();
-        for (Stories s : allStories) {
+        for (Stories s : project.getStory()) {
             if (selectedNames.contains(s.getSubjectLine())) {
                 sprint.addUserStory(s);
             }
         }
 
-        // Push to repository so the observer fires and the sprint list updates
-        Project project = new Project(id, name, description, sprintType, authType);
+        // Save to project and repository
+        project.addUserSprint(sprint);
         ProjectRepository.getInstance().addSprint(sprint);
-        ProjectRepository.getInstance().addProject(project);
+
+        // Update the sprint table in ProjectDetailFrame
+        sprintTableModel.addRow(new Object[]{
+            sprint.getId(), sprint.getName(), sprint.getDescription(), sprint.getStory().size()
+        });
 
         outputArea.setText(
-            "Sprint Created Successfully!\n" +
-            "ID:          " + sprint.getId() + "\n" +
-            "Name:        " + sprint.getName() + "\n" +
-            "Description: " + sprint.getDescription() + "\n" +
-            "Type:        " + sprintType + "\n" +
-            "Auth:        " + authType + "\n" +
-            "Stories:     " + sprint.getStory().size()
+            "Sprint Created!\n" +
+            "Name:    " + sprint.getName() + "\n" +
+            "Stories: " + sprint.getStory().size()
         );
 
         nameField.setText("");
         descriptionArea.setText("");
         storiesList.clearSelection();
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            CreateSprintsGUI gui = new CreateSprintsGUI();
-            gui.setVisible(true);
-        });
     }
 }

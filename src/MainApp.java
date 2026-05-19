@@ -25,9 +25,9 @@ public class MainApp extends JFrame {
         root.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton newProjectBtn = new JButton("+ New Sprint");
+        JButton newProjectBtn = new JButton("+ New Project");
         newProjectBtn.addActionListener(e -> {
-            CreateSprintsGUI form = new CreateSprintsGUI();
+            CreateProjectGUI form = new CreateProjectGUI();
             form.setVisible(true);
         });
         toolbar.add(newProjectBtn);
@@ -35,10 +35,10 @@ public class MainApp extends JFrame {
         JSplitPane splitPane = new JSplitPane(
             JSplitPane.VERTICAL_SPLIT,
             new ProjectListPanel(),
-            new BacklogPanel()
+            new JPanel() // placeholder bottom panel — content lives inside project detail now
         );
-        splitPane.setResizeWeight(0.5);
-        splitPane.setDividerLocation(250);
+        splitPane.setResizeWeight(0.6);
+        splitPane.setDividerLocation(300);
 
         root.add(toolbar, BorderLayout.NORTH);
         root.add(splitPane, BorderLayout.CENTER);
