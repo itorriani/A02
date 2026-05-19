@@ -1,10 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GUI form for creating a new sprint.
- * Collects sprint name, description, type, and auth type from the user,
- * then constructs a Sprints object and adds it to the ProjectRepository.
+ * Collects sprint name, description, type, and auth type from the user.
+ * Lets the user pick stories from the current backlog to assign to the sprint.
  *
  * @author Ivan Torriani
  * @version 1.0
@@ -15,6 +17,8 @@ public class CreateSprintsGUI extends JFrame {
     private JTextArea descriptionArea;
     private JComboBox<String> sprintTypeCombo;
     private JComboBox<String> authTypeCombo;
+    private JList<String> storiesList;
+    private DefaultListModel<String> storiesListModel;
     private JTextArea outputArea;
 
     private static int nextId = 1;
@@ -24,7 +28,7 @@ public class CreateSprintsGUI extends JFrame {
      */
     public CreateSprintsGUI() {
         setTitle("Create New Sprint");
-        setSize(500, 520);
+        setSize(500, 620);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -49,6 +53,17 @@ public class CreateSprintsGUI extends JFrame {
         authTypeCombo = new JComboBox<>(new String[]{"Public", "Private", "Protected"});
         inputPanel.add(authTypeCombo);
 
+        // Stories checklist — populated from the shared StoryRepository
+        inputPanel.add(new JLabel("Assign Stories (hold Cmd/Ctrl to multi-select):"));
+        storiesListModel = new DefaultListModel<>();
+        for (Stories s : ProjectRepository.getInstance().getStories()) {
+            storiesListModel.addElement(s.getSubjectLine());
+        }
+        storiesList = new JList<>(storiesListModel);
+        storiesList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        storiesList.setVisibleRowCount(4);
+        inputPanel.add(new JScrollPane(storiesList));
+
         JButton createButton = new JButton("Create Sprint");
         inputPanel.add(createButton);
 
@@ -64,8 +79,8 @@ public class CreateSprintsGUI extends JFrame {
     }
 
     /**
-     * Validates input, creates a Sprints object, and displays a confirmation.
-     * Clears the form on success.
+     * Validates input, creates a Sprints object with selected stories,
+     * adds it to the repository, and displays a confirmation.
      */
     private void handleCreateSprint() {
         String name = nameField.getText().trim();
@@ -78,7 +93,21 @@ public class CreateSprintsGUI extends JFrame {
             return;
         }
 
-        Sprints sprint = new Sprints(nextId++, name, description);
+        int id = nextId++;
+        Sprints sprint = new Sprints(id, name, description);
+
+        // Add selected stories to the sprint
+        List<Stories> allStories = ProjectRepository.getInstance().getStories();
+        List<String> selectedNames = storiesList.getSelectedValuesList();
+        for (Stories s : allStories) {
+            if (selectedNames.contains(s.getSubjectLine())) {
+                sprint.addUserStory(s);
+            }
+        }
+
+        // Push to repository so the observer fires and the sprint list updates
+        Project project = new Project(id, name, description, sprintType, authType);
+        ProjectRepository.getInstance().addProject(project);
 
         outputArea.setText(
             "Sprint Created Successfully!\n" +
@@ -86,11 +115,13 @@ public class CreateSprintsGUI extends JFrame {
             "Name:        " + sprint.getName() + "\n" +
             "Description: " + sprint.getDescription() + "\n" +
             "Type:        " + sprintType + "\n" +
-            "Auth:        " + authType
+            "Auth:        " + authType + "\n" +
+            "Stories:     " + sprint.getStory().size()
         );
 
         nameField.setText("");
         descriptionArea.setText("");
+        storiesList.clearSelection();
     }
 
     public static void main(String[] args) {

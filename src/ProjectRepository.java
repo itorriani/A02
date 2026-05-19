@@ -15,6 +15,7 @@ public class ProjectRepository {
     private static ProjectRepository instance;
 
     private final List<Project> projects = new ArrayList<>();
+    private final List<Stories> stories = new ArrayList<>();
     private final List<ProjectObserver> observers = new ArrayList<>();
 
     private ProjectRepository() {}
@@ -41,13 +42,16 @@ public class ProjectRepository {
         notifyObservers(project);
     }
 
-    /**
-     * Returns an unmodifiable view of all stored projects.
-     *
-     * @return read-only list of projects
-     */
     public List<Project> getProjects() {
         return Collections.unmodifiableList(projects);
+    }
+
+    public void addStory(Stories story) {
+        stories.add(story);
+    }
+
+    public List<Stories> getStories() {
+        return Collections.unmodifiableList(stories);
     }
 
     /**
