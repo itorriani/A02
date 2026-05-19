@@ -20,7 +20,7 @@ public class ProjectListPanel extends JPanel implements ProjectObserver {
      */
     public ProjectListPanel() {
         setLayout(new BorderLayout(5, 5));
-        setBorder(BorderFactory.createTitledBorder("Project List"));
+        setBorder(BorderFactory.createTitledBorder("Sprint List"));
 
         String[] columns = {"ID", "Name", "Description", "Type", "Auth"};
         tableModel = new DefaultTableModel(columns, 0) {

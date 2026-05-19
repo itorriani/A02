@@ -25,9 +25,9 @@ public class MainApp extends JFrame {
         root.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton newProjectBtn = new JButton("+ New Project");
+        JButton newProjectBtn = new JButton("+ New Sprint");
         newProjectBtn.addActionListener(e -> {
-            CreateProjectGUI form = new CreateProjectGUI();
+            CreateSprintsGUI form = new CreateSprintsGUI();
             form.setVisible(true);
         });
         toolbar.add(newProjectBtn);
