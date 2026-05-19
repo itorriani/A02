@@ -12,6 +12,7 @@ public class Stories {
     private String subjectLine;
     private String description;
     private LinkedList<String> attatchments = new LinkedList<>();
+    private LinkedList<String> tasks = new LinkedList<>();
     private boolean position;
     private int value;
     private String assignedUser;
@@ -83,5 +84,13 @@ public class Stories {
 
     public String getAssignedUser() {
         return assignedUser;
+    }
+
+    public void setTasks(LinkedList<String> tasks) {
+        this.tasks = tasks;
+    }
+
+    public LinkedList<String> getTasks() {
+        return tasks;
     }
 }

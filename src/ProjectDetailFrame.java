@@ -3,6 +3,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.LinkedList;
 
 /**
  * Window display for a new project.
@@ -14,11 +15,11 @@ import java.awt.event.MouseEvent;
 public class ProjectDetailFrame extends JFrame {
 
     //create project instance
-    private  Project project;
-    /
+    private Project project;
+
     //create tables for sprints and stories
-    private  DefaultTableModel sprintTableModel;
-    private  DefaultTableModel storyTableModel;
+    private DefaultTableModel sprintTableModel;
+    private DefaultTableModel storyTableModel;
 
     public ProjectDetailFrame(Project project) {
         //refer to project instance
@@ -26,11 +27,14 @@ public class ProjectDetailFrame extends JFrame {
 
         //title the popup based on project title
         setTitle("Project: " + project.getName());
+        setSize(650, 600);
 
         //closing operation
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
+
+        //debugging formatting errors
         JPanel root = new JPanel(new BorderLayout(10, 10));
         root.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -42,8 +46,13 @@ public class ProjectDetailFrame extends JFrame {
         JPanel sprintPanel = new JPanel(new BorderLayout(5, 5));
         sprintPanel.setBorder(BorderFactory.createTitledBorder("Sprints"));
 
-        //define the spirnnt columns
+        //define the sprint columns
         String[] sprintCols = {"ID", "Name", "Description", "Stories"};
+
+        // initialize the model
+        sprintTableModel = new DefaultTableModel(sprintCols, 0) {
+            @Override public boolean isCellEditable(int r, int c) { return false; }
+        };
 
         ///create the table
         JTable sprintTable = new JTable(sprintTableModel);
@@ -157,13 +166,14 @@ public class ProjectDetailFrame extends JFrame {
     private void openNewStoryDialog() {
         JDialog dialog = new JDialog(this, "New Story", true);
         dialog.setLayout(new GridLayout(0, 2, 5, 5));
-        dialog.setSize(400, 250);
+        dialog.setSize(400, 300);
         dialog.setLocationRelativeTo(this);
 
         dialog.add(new JLabel("Name:")); JTextField f1 = new JTextField(); dialog.add(f1);
         dialog.add(new JLabel("Description:")); JTextField f2 = new JTextField(); dialog.add(f2);
         dialog.add(new JLabel("Value:")); JTextField f3 = new JTextField(); dialog.add(f3);
         dialog.add(new JLabel("User Assignment:")); JTextField f4 = new JTextField(); dialog.add(f4);
+        dialog.add(new JLabel("Tasks (comma-separated):")); JTextField f5 = new JTextField(); dialog.add(f5);
 
         JButton add = new JButton("Add Story");
         dialog.add(new JLabel());
@@ -172,6 +182,13 @@ public class ProjectDetailFrame extends JFrame {
         add.addActionListener(e -> {
             Stories story = new Stories(f1.getText(), f2.getText(),
                     Integer.parseInt(f3.getText()), f4.getText());
+            // parse comma-separated tasks and add to story
+            LinkedList<String> taskList = new LinkedList<>();
+            for (String t : f5.getText().split(",")) {
+                String trimmed = t.trim();
+                if (!trimmed.isEmpty()) taskList.add(trimmed);
+            }
+            story.setTasks(taskList);
             project.addUserStory(story);
             ProjectRepository.getInstance().addStory(story);
             addStoryRow(story);
